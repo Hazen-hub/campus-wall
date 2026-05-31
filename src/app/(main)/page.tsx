@@ -5,6 +5,10 @@ import { useSession } from "next-auth/react";
 import PostCard from "@/components/PostCard";
 import PostForm from "@/components/PostForm";
 import GuestBanner from "@/components/GuestBanner";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
+import CommunityRules from "@/components/CommunityRules";
+import OnlineCount from "@/components/OnlineCount";
+import ChildrensDay from "@/components/ChildrensDay";
 import CategoryTabs from "@/components/CategoryTabs";
 import type { PostWithAuthor } from "@/types";
 
@@ -154,6 +158,12 @@ export default function HomePage() {
           </button>
         </div>
       </div>
+
+      {/* Announcement */}
+      <AnnouncementBanner category={category} />
+      <CommunityRules />
+      <ChildrensDay />
+      <OnlineCount />
 
       {/* Category tabs */}
       <CategoryTabs active={category} onChange={(key) => { setCategory(key); setPage(1); fetchPosts(1, true); }} />
