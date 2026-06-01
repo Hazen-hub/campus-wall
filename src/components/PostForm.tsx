@@ -60,7 +60,6 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
-
     if (images.length + files.length > 9) {
       setError("最多上传9张图片");
       return;
@@ -69,14 +68,37 @@ export default function PostForm({ onPostCreated }: PostFormProps) {
     setUploading(true);
     setError("");
 
+    // 浏览器端压缩（Vercel 限制 4.5MB）
+    async function compressFile(file: File): Promise<File> {
+      if (file.size < 2 * 1024 * 1024) return file; // <2MB 不压缩
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const maxW = 1920;
+          let w = img.width, h = img.height;
+          if (w > maxW) { h = h * maxW / w; w = maxW; }
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext("2d")!;
+          ctx.drawImage(img, 0, 0, w, h);
+          canvas.toBlob((blob) => {
+            resolve(new File([blob!], file.name, { type: "image/jpeg" }));
+          }, "image/jpeg", 0.7);
+        };
+        img.src = URL.createObjectURL(file);
+      });
+    }
+
     const formData = new FormData();
     for (const file of Array.from(files)) {
-      formData.append("files", file);
+      const compressed = await compressFile(file);
+      formData.append("files", compressed);
     }
 
     try {
       const res = await fetch("/api/upload", {
         method: "POST",
+        credentials: "include",
         body: formData,
       });
       const data = await res.json();

@@ -280,7 +280,7 @@ export default function PostCard({ post, onDelete, showModActions }: PostCardPro
           }`}
         >
           <span className={`text-lg ${showHeartAnim ? "animate-heart" : ""}`}>
-            {(()=>{const isCD=new Date().getMonth()===5&&(new Date().getDate()===1||new Date().getDate()===2);return isCD?(<span style={{animation:"lollipopBounce 1.5s ease-in-out infinite",display:"inline-block"}}>{isLiked?"🍭":"🍬"}</span>):(isLiked?"❤️":"🤍")})()}
+            <span style={isLiked ? {animation:"candyPop 0.4s ease-out",display:"inline-block"} : {display:"inline-block"}}>{isLiked ? "🍭" : "🍬"}</span>
           </span>
           <span className="font-medium">{likesCount}</span>
         </button>

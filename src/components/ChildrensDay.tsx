@@ -38,7 +38,7 @@ export default function ChildrensDay() {
     `;
     document.head.appendChild(style);
 
-    // 彩虹头像框 - 内联样式
+    // 彩虹头像框（内联样式）
     function rainbow() {
       document.querySelectorAll("div[class*=rounded-full]").forEach((d: any) => {
         const imgs = d.querySelectorAll("img");
@@ -46,13 +46,10 @@ export default function ChildrensDay() {
           imgs.forEach((img: any) => {
             if (!img.dataset.rbow) {
               img.dataset.rbow = "1";
-              img.style.setProperty("box-shadow", "0 0 0 4px #FF1493,0 0 0 8px #FFD700,0 0 0 12px #00FF7F,0 0 0 16px #00BFFF", "important");
-              img.style.setProperty("border-radius", "50%", "important");
+              img.style.setProperty("box-shadow","0 0 0 4px #FF1493,0 0 0 8px #FFD700,0 0 0 12px #00FF7F,0 0 0 16px #00BFFF","important");
+              img.style.setProperty("border-radius","50%","important");
             }
           });
-        } else if (!d.dataset.rbow2) {
-          d.dataset.rbow2 = "1";
-          d.style.setProperty("box-shadow", "0 0 0 4px #FF1493,0 0 0 8px #FFD700,0 0 0 12px #00FF7F,0 0 0 16px #00BFFF", "important");
         }
       });
     }

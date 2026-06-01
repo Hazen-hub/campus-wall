@@ -54,12 +54,6 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
       </head>
       <body className="min-h-screen overscroll-none" suppressHydrationWarning>
-        {/* 防暗黑模式闪屏：只在 <html> 上加 dark，不碰 React 管理的 <body> */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `!function(){var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme:dark)").matches))document.documentElement.classList.add("dark")}()`,
-          }}
-        />
         <Providers>{children}</Providers>
       </body>
     </html>
