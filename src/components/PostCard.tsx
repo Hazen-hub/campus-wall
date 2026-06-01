@@ -280,7 +280,7 @@ export default function PostCard({ post, onDelete, showModActions }: PostCardPro
           }`}
         >
           <span className={`text-lg ${showHeartAnim ? "animate-heart" : ""}`}>
-            {isLiked ? "❤️" : "🤍"}
+            {(()=>{const isCD=new Date().getMonth()===5&&(new Date().getDate()===1||new Date().getDate()===2);return isCD?(<span style={{animation:"lollipopBounce 1.5s ease-in-out infinite",display:"inline-block"}}>{isLiked?"🍭":"🍬"}</span>):(isLiked?"❤️":"🤍")})()}
           </span>
           <span className="font-medium">{likesCount}</span>
         </button>
