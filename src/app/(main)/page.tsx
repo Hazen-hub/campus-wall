@@ -8,7 +8,6 @@ import GuestBanner from "@/components/GuestBanner";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
 import CommunityRules from "@/components/CommunityRules";
 import OnlineCount from "@/components/OnlineCount";
-import ChildrensDay from "@/components/ChildrensDay";
 import CategoryTabs from "@/components/CategoryTabs";
 import type { PostWithAuthor } from "@/types";
 
@@ -162,7 +161,6 @@ export default function HomePage() {
       {/* Announcement */}
       <AnnouncementBanner category={category} />
       <CommunityRules />
-      <ChildrensDay />
       <OnlineCount />
 
       {/* Category tabs */}

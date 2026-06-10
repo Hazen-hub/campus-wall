@@ -92,7 +92,6 @@ export default function RegisterPage() {
       if (data.success) {
         setCodeSent(true);
         setCountdown(60);
-        {/* */}
 
         // 验证码已发送到邮箱，不在页面上显示
       } else {
@@ -166,29 +165,51 @@ export default function RegisterPage() {
     }
   };
 
+  // Input style helper based on validation state
+  const inputClass = (hasError: boolean, hasSuccess: boolean) =>
+    `w-full px-4 py-3 border rounded-xl text-sm bg-[#FAFAFA] dark:bg-[#222244] text-[#171717] dark:text-[#EDE8F0] placeholder-[#A3A3A3] dark:placeholder-[#6B6380] outline-none transition-colors ${
+      hasError
+        ? "border-[#EF4444] focus:border-[#EF4444] focus:ring-1 focus:ring-[#EF4444]"
+        : hasSuccess
+        ? "border-[#22C55E] focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+        : "border-[#E5E5E5] dark:border-[#2A2A48] focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+    }`;
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA] dark:bg-[#0F0F23] px-4 py-8">
       <div className="w-full max-w-sm">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-3xl font-bold text-primary">
-            <span>🎓</span>
-            <span>禺山高级中学</span>
+        <div className="text-center mb-6">
+          <Link href="/" className="inline-flex flex-col items-center gap-3 group">
+            <div className="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-extrabold text-2xl shadow-lg shadow-indigo-600/25 group-hover:shadow-xl group-active:scale-95 transition-all select-none">
+              番
+            </div>
+            <h1 className="text-2xl font-extrabold text-[#171717] dark:text-[#EDE8F0] tracking-tight">
+              番禺校园墙
+            </h1>
           </Link>
-          <p className="text-gray-500 mt-2">创建你的账号</p>
+          <p className="text-[#737373] dark:text-[#6B6380] mt-1.5 text-sm">
+            创建你的账号
+          </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-4">
+        {/* Form Card */}
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white dark:bg-[#1A1A35] rounded-2xl shadow-sm border border-[#E5E5E5] dark:border-[#2A2A48] p-6 space-y-4"
+        >
           {error && (
-            <div className="bg-red-50 text-red-600 text-sm px-4 py-2.5 rounded-lg">
+            <div className="bg-red-50 dark:bg-[#2D1520] text-[#EF4444] text-sm font-medium px-4 py-2.5 rounded-xl border border-red-100 dark:border-red-500/10">
               {error}
             </div>
           )}
 
           {/* 用户名 */}
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="username"
+              className="block text-sm font-semibold text-[#171717] dark:text-[#EDE8F0] mb-1.5"
+            >
               用户名
             </label>
             <input
@@ -200,53 +221,59 @@ export default function RegisterPage() {
               required
               minLength={2}
               maxLength={20}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+              className={inputClass(false, !!username)}
             />
           </div>
 
-          {/* 邮箱 + 验证码 */}
+          {/* 邮箱 + 验证图标 */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-semibold text-[#171717] dark:text-[#EDE8F0] mb-1.5"
+            >
               邮箱
             </label>
-            <div className="flex gap-2">
-              <div className="flex-1 relative">
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required
-                  className={`w-full px-3 py-2.5 border rounded-lg text-sm outline-none transition-colors ${
-                    emailError
-                      ? "border-red-300 focus:border-red-400 focus:ring-1 focus:ring-red-400"
-                      : email && !emailError
-                      ? "border-green-300 focus:border-primary focus:ring-1 focus:ring-primary"
-                      : "border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary"
-                  }`}
-                />
-                {/* 邮箱格式状态图标 */}
-                {email && (
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm pointer-events-none">
-                    {emailError ? "❌" : "✅"}
-                  </span>
-                )}
-              </div>
+            <div className="relative">
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                required
+                className={`${inputClass(!!emailError, !!email && !emailError)} pr-10`}
+              />
+              {/* 邮箱格式状态图标 */}
+              {email && (
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm pointer-events-none">
+                  {emailError ? (
+                    <svg className="w-5 h-5 text-[#EF4444]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-[#22C55E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </span>
+              )}
             </div>
             {/* 邮箱格式错误提示 */}
             {emailError && (
-              <p className="mt-1 text-xs text-red-500">{emailError}</p>
+              <p className="mt-1 text-xs text-[#EF4444] font-medium">{emailError}</p>
             )}
             {/* 常见邮箱提示 */}
             {email && !emailError && (
-              <p className="mt-1 text-xs text-green-600">邮箱格式正确</p>
+              <p className="mt-1 text-xs text-[#22C55E] font-medium">邮箱格式正确</p>
             )}
           </div>
 
           {/* 验证码 */}
           <div>
-            <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="code"
+              className="block text-sm font-semibold text-[#171717] dark:text-[#EDE8F0] mb-1.5"
+            >
               验证码
             </label>
             <div className="flex gap-2">
@@ -263,17 +290,18 @@ export default function RegisterPage() {
                 placeholder="输入6位验证码"
                 required
                 maxLength={6}
-                className="flex-1 px-3 py-2.5 border border-gray-200 rounded-lg text-sm tracking-[0.3em] text-center font-mono font-bold text-lg outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                className="flex-1 px-4 py-3 border border-[#E5E5E5] dark:border-[#2A2A48] rounded-xl text-center tracking-[0.3em] font-mono font-bold text-lg bg-[#FAFAFA] dark:bg-[#222244] text-[#171717] dark:text-[#EDE8F0] placeholder-[#A3A3A3] dark:placeholder-[#6B6380] outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
               />
               <button
                 type="button"
                 onClick={handleSendCode}
                 disabled={sendingCode || countdown > 0 || !email || !!emailError}
-                className="px-3 py-2.5 text-sm font-medium rounded-lg whitespace-nowrap min-w-[100px] transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-primary text-white hover:bg-primary-dark"
+                className="px-4 py-3 text-sm font-semibold rounded-xl whitespace-nowrap min-w-[110px] transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-sm shadow-indigo-600/20 hover:from-indigo-700 hover:to-indigo-600 active:scale-95"
               >
                 {sendingCode ? (
-                  <span className="flex items-center gap-1 justify-center">
-                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span className="flex items-center gap-1.5 justify-center">
+                    <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    发送中
                   </span>
                 ) : countdown > 0 ? (
                   `${countdown}s`
@@ -285,13 +313,18 @@ export default function RegisterPage() {
               </button>
             </div>
             {codeSent && countdown === 0 && (
-              <p className="mt-1 text-xs text-gray-400">未收到验证码？请检查垃圾邮件或点击重新发送</p>
+              <p className="mt-1.5 text-xs text-[#A3A3A3] dark:text-[#6B6380]">
+                未收到验证码？请检查垃圾邮件或点击重新发送
+              </p>
             )}
           </div>
 
           {/* 密码 */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="password"
+              className="block text-sm font-semibold text-[#171717] dark:text-[#EDE8F0] mb-1.5"
+            >
               密码
             </label>
             <input
@@ -302,13 +335,16 @@ export default function RegisterPage() {
               placeholder="至少6个字符"
               required
               minLength={6}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+              className={inputClass(false, password.length >= 6)}
             />
           </div>
 
           {/* 确认密码 */}
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-semibold text-[#171717] dark:text-[#EDE8F0] mb-1.5"
+            >
               确认密码
             </label>
             <input
@@ -318,19 +354,20 @@ export default function RegisterPage() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="再次输入密码"
               required
-              className={`w-full px-3 py-2.5 border rounded-lg text-sm outline-none focus:ring-1 transition-colors ${
-                confirmPassword && password !== confirmPassword
-                  ? "border-red-300 focus:border-red-400 focus:ring-red-400"
-                  : confirmPassword && password === confirmPassword
-                  ? "border-green-300 focus:border-primary focus:ring-primary"
-                  : "border-gray-200 focus:border-primary focus:ring-primary"
-              }`}
+              className={`${inputClass(
+                !!confirmPassword && password !== confirmPassword,
+                !!confirmPassword && password === confirmPassword
+              )} pr-10`}
             />
             {confirmPassword && password !== confirmPassword && (
-              <p className="mt-1 text-xs text-red-500">两次输入的密码不一致</p>
+              <p className="mt-1 text-xs text-[#EF4444] font-medium">
+                两次输入的密码不一致
+              </p>
             )}
             {confirmPassword && password === confirmPassword && (
-              <p className="mt-1 text-xs text-green-600">密码一致</p>
+              <p className="mt-1 text-xs text-[#22C55E] font-medium">
+                密码一致
+              </p>
             )}
           </div>
 
@@ -338,11 +375,11 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading || !code || !email || !!emailError}
-            className="w-full py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm shadow-indigo-600/20"
           >
             {loading ? (
               <span className="flex items-center gap-2 justify-center">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 注册中
               </span>
             ) : (
@@ -351,21 +388,30 @@ export default function RegisterPage() {
           </button>
 
           {/* 注意事项 */}
-          <p className="text-xs text-gray-400 text-center">
+          <p className="text-xs text-[#A3A3A3] dark:text-[#6B6380] text-center">
             注册即表示同意校园墙的使用规则，请文明发言
           </p>
         </form>
 
         {/* Login link */}
-        <p className="text-center mt-6 text-sm text-gray-500">
+        <p className="text-center mt-5 text-sm text-[#737373] dark:text-[#6B6380] font-medium">
           已有账号？
-          <Link href="/auth/login" className="text-primary font-medium hover:underline ml-1">
+          <Link
+            href="/auth/login"
+            className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline ml-1"
+          >
             立即登录
           </Link>
         </p>
 
-        <p className="text-center mt-4 text-xs text-gray-400">
-          <Link href="/" className="hover:underline">← 返回首页</Link>
+        {/* Back to home */}
+        <p className="text-center mt-4 text-xs">
+          <Link
+            href="/"
+            className="text-[#A3A3A3] dark:text-[#6B6380] hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
+          >
+            &larr; 返回首页
+          </Link>
         </p>
       </div>
     </div>
